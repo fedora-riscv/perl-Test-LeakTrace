@@ -1,7 +1,7 @@
 Name:           perl-Test-LeakTrace
 Summary:        Traces memory leaks
 Version:        0.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL+ or Artistic
 Group:          Development/Libraries
 Source0:        http://search.cpan.org/CPAN/authors/id/G/GF/GFUJI/Test-LeakTrace-%{version}.tar.gz 
@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3*
 
 %changelog
+* Thu May 06 2010 Marcela Maslanova <mmaslano@redhat.com> - 0.10-2
+- Mass rebuild with perl-5.12.0
+
 * Sun Apr 04 2010 Chris Weyl <cweyl@alumni.drew.edu> 0.10-1
 - specfile by Fedora::App::MaintainerTools 0.006
 
