@@ -1,6 +1,6 @@
 Name:           perl-Test-LeakTrace
 Summary:        Traces memory leaks
-Version:        0.10
+Version:        0.11
 Release:        1%{?dist}
 License:        GPL+ or Artistic
 Group:          Development/Libraries
@@ -62,6 +62,10 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3*
 
 %changelog
+* Wed Nov 17 2010 Paul Howarth <paul@city-fan.org> - 0.11-1
+- update to 0.11 (#654301)
+  - fix false-positive related to XS code (CPAN RT #58133)
+
 * Sun Apr 04 2010 Chris Weyl <cweyl@alumni.drew.edu> 0.10-1
 - specfile by Fedora::App::MaintainerTools 0.006
 
