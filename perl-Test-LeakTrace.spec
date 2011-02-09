@@ -1,7 +1,7 @@
 Name:           perl-Test-LeakTrace
 Summary:        Traces memory leaks
 Version:        0.13
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL+ or Artistic
 Group:          Development/Libraries
 Source0:        http://search.cpan.org/CPAN/authors/id/G/GF/GFUJI/Test-LeakTrace-%{version}.tar.gz 
@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3*
 
 %changelog
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.13-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Wed Nov 17 2010 Paul Howarth <paul@city-fan.org> - 0.13-1
 - update to 0.13
   - use ">= 0", instead of "== 0" for no_leaks_ok()
