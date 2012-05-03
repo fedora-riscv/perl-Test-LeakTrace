@@ -5,12 +5,10 @@
 %global speller aspell
 %endif
 
-#TODO: BR: perl(Test::Valgrind) when available
-
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.14
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+ or Artistic
 Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
@@ -23,6 +21,7 @@ BuildRequires:	perl(Test::Pod) >= 1.14
 BuildRequires:	perl(Test::Pod::Coverage) >= 1.04
 BuildRequires:	perl(Test::Spelling), %{speller}-en
 BuildRequires:	perl(Test::Synopsis)
+BuildRequires:	perl(Test::Valgrind)
 Requires:	perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
 
 # Obsolete/Provide old tests subpackage
@@ -69,11 +68,11 @@ find %{buildroot} -type f -name '*.bs' -a -size 0 -exec rm -f {} ';'
 %check
 make test
 
-# Run the release tests, except for xt/05_valgrind.t because we don't have Test::Valgrind yet
+# Run the release tests
 # Don't spell-check JA.pod as it can generate false positives
 mv lib/Test/LeakTrace/JA.pod ./
 touch lib/Test/LeakTrace/JA.pod
-DICTIONARY=en_US make test TEST_FILES="$(echo xt/*.t | sed 's|xt/05_valgrind.t||')"
+DICTIONARY=en_US make test TEST_FILES="xt/*.t"
 rm lib/Test/LeakTrace/JA.pod
 mv ./JA.pod lib/Test/LeakTrace/
 
@@ -89,6 +88,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Test::LeakTrace::Script.3pm*
 
 %changelog
+* Thu May  3 2012 Paul Howarth <paul@city-fan.org> - 0.14-2
+- BR: perl(Test::Valgrind) for additional test coverage
+
 * Mon Mar 12 2012 Paul Howarth <paul@city-fan.org> - 0.14-1
 - Update to 0.14
   - Fix Test::Valgrind failures
