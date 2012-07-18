@@ -5,10 +5,15 @@
 %global speller aspell
 %endif
 
+# some arches don't have valgrind so we need to disable its support on them
+%ifarch %{ix86} x86_64 ppc ppc64 s390x %{arm}
+%global with_valgrind 1
+%endif
+
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.14
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	GPL+ or Artistic
 Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
@@ -21,7 +26,9 @@ BuildRequires:	perl(Test::Pod) >= 1.14
 BuildRequires:	perl(Test::Pod::Coverage) >= 1.04
 BuildRequires:	perl(Test::Spelling), %{speller}-en
 BuildRequires:	perl(Test::Synopsis)
+%if 0%{?with_valgrind}
 BuildRequires:	perl(Test::Valgrind)
+%endif
 Requires:	perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
 
 # Obsolete/Provide old tests subpackage
@@ -72,7 +79,11 @@ make test
 # Don't spell-check JA.pod as it can generate false positives
 mv lib/Test/LeakTrace/JA.pod ./
 touch lib/Test/LeakTrace/JA.pod
+%if 0%{?with_valgrind}
 DICTIONARY=en_US make test TEST_FILES="xt/*.t"
+%else
+DICTIONARY=en_US make test TEST_FILES="$(echo xt/*.t | sed 's|xt/05_valgrind.t||')"
+%endif
 rm lib/Test/LeakTrace/JA.pod
 mv ./JA.pod lib/Test/LeakTrace/
 
@@ -88,6 +99,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Test::LeakTrace::Script.3pm*
 
 %changelog
+* Wed Jul 18 2012 Dan Horák <dan[at]danny.cz> - 0.14-4
+- valgrind is available only on selected arches and perl(Test::Valgrind) is noarch
+
 * Mon Jun 18 2012 Petr Pisar <ppisar@redhat.com> - 0.14-3
 - Perl 5.16 rebuild
 
