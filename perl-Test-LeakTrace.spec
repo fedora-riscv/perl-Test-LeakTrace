@@ -13,7 +13,7 @@
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.14
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	GPL+ or Artistic
 Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
@@ -99,6 +99,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Test::LeakTrace::Script.3pm*
 
 %changelog
+* Thu Jul 25 2013 Petr Pisar <ppisar@redhat.com> - 0.14-6
+- Perl 5.18 rebuild
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.14-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
