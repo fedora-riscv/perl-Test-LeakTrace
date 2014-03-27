@@ -13,7 +13,7 @@
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.14
-Release:	7%{?dist}
+Release:	8%{?dist}
 License:	GPL+ or Artistic
 Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
@@ -24,7 +24,12 @@ BuildRequires:	perl(ExtUtils::MakeMaker) >= 6.30
 BuildRequires:	perl(Test::More) >= 0.62
 BuildRequires:	perl(Test::Pod) >= 1.14
 BuildRequires:	perl(Test::Pod::Coverage) >= 1.04
+%if !%{defined perl_bootstrap}
+# Cycle: perl-Test-LeakTrace → perl-Test-Spelling → perl-Pod-Spell
+# → perl-File-SharedDir-ProjectDistDir → perl-Path-Tiny → perl-Unicode-UTF8
+# → perl-Test-LeakTrace
 BuildRequires:	perl(Test::Spelling), %{speller}-en
+%endif
 BuildRequires:	perl(Test::Synopsis)
 %if 0%{?with_valgrind}
 BuildRequires:	perl(Test::Valgrind)
@@ -99,6 +104,11 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Test::LeakTrace::Script.3pm*
 
 %changelog
+* Tue Mar 25 2014 Petr Pisar <ppisar@redhat.com> - 0.14-8
+- Break build-cycle: perl-Test-LeakTrace → perl-Test-Spelling → perl-Pod-Spell
+  → perl-File-SharedDir-ProjectDistDir → perl-Path-Tiny → perl-Unicode-UTF8
+  → perl-Test-LeakTrace
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.14-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
