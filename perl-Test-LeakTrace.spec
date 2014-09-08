@@ -13,7 +13,7 @@
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.14
-Release:	11%{?dist}
+Release:	12%{?dist}
 License:	GPL+ or Artistic
 Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
@@ -104,6 +104,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Test::LeakTrace::Script.3pm*
 
 %changelog
+* Sun Sep 07 2014 Jitka Plesnikova <jplesnik@redhat.com> - 0.14-12
+- Perl 5.20 re-rebuild of bootstrapped packages
+
 * Fri Aug 29 2014 Jitka Plesnikova <jplesnik@redhat.com> - 0.14-11
 - Perl 5.20 rebuild
 
