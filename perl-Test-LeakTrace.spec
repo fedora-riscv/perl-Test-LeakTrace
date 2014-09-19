@@ -6,22 +6,39 @@
 %endif
 
 # some arches don't have valgrind so we need to disable its support on them
-%ifarch %{ix86} x86_64 ppc ppc64 s390x %{arm}
+%ifarch %{ix86} x86_64 ppc ppc64 ppc64le s390x %{arm} aarch64
 %global with_valgrind 1
 %endif
 
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.14
-Release:	12%{?dist}
+Release:	13%{?dist}
 License:	GPL+ or Artistic
 Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
 Source0:	http://search.cpan.org/CPAN/authors/id/G/GF/GFUJI/Test-LeakTrace-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(id -nu)
+# Module Build
+BuildRequires:	perl
+BuildRequires:	perl(ExtUtils::MakeMaker)
+BuildRequires:	perl(inc::Module::Install)
+BuildRequires:	perl(Module::Install::AuthorTests)
+BuildRequires:	perl(Module::Install::Repository)
+# Module Runtime
 BuildRequires:	perl(Exporter) >= 5.57
-BuildRequires:	perl(ExtUtils::MakeMaker) >= 6.30
+BuildRequires:	perl(strict)
+BuildRequires:	perl(Test::Builder::Module)
+BuildRequires:	perl(warnings)
+BuildRequires:	perl(XSLoader)
+# Test Suite
+BuildRequires:	perl(autouse)
+BuildRequires:	perl(Class::Struct)
+BuildRequires:	perl(constant)
+BuildRequires:	perl(Data::Dumper)
 BuildRequires:	perl(Test::More) >= 0.62
+BuildRequires:	perl(threads)
+# Extra Tests
 BuildRequires:	perl(Test::Pod) >= 1.14
 BuildRequires:	perl(Test::Pod::Coverage) >= 1.04
 %if !%{defined perl_bootstrap}
@@ -34,14 +51,8 @@ BuildRequires:	perl(Test::Synopsis)
 %if 0%{?with_valgrind}
 BuildRequires:	perl(Test::Valgrind)
 %endif
+# Runtime
 Requires:	perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
-
-# Obsolete/Provide old tests subpackage
-# Can be removed during F19 development cycle
-%if 0%{?perl_default_filter:1}
-Obsoletes:	%{name}-tests < 0.14
-Provides:	%{name}-tests = %{version}-%{release}
-%endif
 
 # Don't provide private perl libs
 %{?perl_default_filter}
@@ -65,6 +76,10 @@ chmod -c -x lib/Test/LeakTrace/Script.pm t/lib/foo.pl
 
 # Fix up shellbangs in doc scripts
 sed -i -e 's|^#!perl|#!/usr/bin/perl|' benchmark/*.pl example/*.{pl,t} {t,xt}/*.t
+
+# Avoid bundled Module::Install and use the system version instead
+rm -rf inc/
+sed -i -e '/^inc\//d' MANIFEST
 
 %build
 perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags}"
@@ -104,6 +119,12 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Test::LeakTrace::Script.3pm*
 
 %changelog
+* Fri Sep 19 2014 Paul Howarth <paul@city-fan.org> - 0.14-13
+- ppc64le and aarch64 have valgrind
+- Drop obsoletes/provides for old -tests sub-package
+- Avoid bundled Module::Install and use system version instead
+- Classify buildreqs by usage
+
 * Sun Sep 07 2014 Jitka Plesnikova <jplesnik@redhat.com> - 0.14-12
 - Perl 5.20 re-rebuild of bootstrapped packages
 
