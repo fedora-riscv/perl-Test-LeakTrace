@@ -1,10 +1,3 @@
-# Pick up the right dictionary for the spell check
-%if %(perl -e 'print $] >= 5.010000 ? 1 : 0;')
-%global speller hunspell
-%else
-%global speller aspell
-%endif
-
 # some arches don't have valgrind so we need to disable its support on them
 %ifarch %{ix86} x86_64 ppc ppc64 ppc64le s390x %{arm} aarch64
 %global with_valgrind 1
@@ -12,8 +5,8 @@
 
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
-Version:	0.14
-Release:	13%{?dist}
+Version:	0.15
+Release:	1%{?dist}
 License:	GPL+ or Artistic
 Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
@@ -39,17 +32,15 @@ BuildRequires:	perl(Data::Dumper)
 BuildRequires:	perl(Test::More) >= 0.62
 BuildRequires:	perl(threads)
 # Extra Tests
+%if !%{defined perl_bootstrap}
 BuildRequires:	perl(Test::Pod) >= 1.14
 BuildRequires:	perl(Test::Pod::Coverage) >= 1.04
-%if !%{defined perl_bootstrap}
-# Cycle: perl-Test-LeakTrace → perl-Test-Spelling → perl-Pod-Spell
-# → perl-File-SharedDir-ProjectDistDir → perl-Path-Tiny → perl-Unicode-UTF8
-# → perl-Test-LeakTrace
-BuildRequires:	perl(Test::Spelling), %{speller}-en
-%endif
+# TODO: Needs later version of Test::Spellunker than is currently available in Fedora
+#BuildRequires:	perl(Test::Spellunker)
 BuildRequires:	perl(Test::Synopsis)
 %if 0%{?with_valgrind}
 BuildRequires:	perl(Test::Valgrind)
+%endif
 %endif
 # Runtime
 Requires:	perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
@@ -81,6 +72,12 @@ sed -i -e 's|^#!perl|#!/usr/bin/perl|' benchmark/*.pl example/*.{pl,t} {t,xt}/*.
 rm -rf inc/
 sed -i -e '/^inc\//d' MANIFEST
 
+# Don't try to run the valgrind test whilst bootstrapping
+%if %{defined perl_bootstrap}
+rm xt/05_valgrind.t
+sed -i -e '/^xt\/05_valgrind\.t/d' MANIFEST
+%endif
+
 %build
 perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags}"
 make %{?_smp_mflags}
@@ -95,18 +92,6 @@ find %{buildroot} -type f -name '*.bs' -a -size 0 -exec rm -f {} ';'
 %check
 make test
 
-# Run the release tests
-# Don't spell-check JA.pod as it can generate false positives
-mv lib/Test/LeakTrace/JA.pod ./
-touch lib/Test/LeakTrace/JA.pod
-%if 0%{?with_valgrind}
-DICTIONARY=en_US make test TEST_FILES="xt/*.t"
-%else
-DICTIONARY=en_US make test TEST_FILES="$(echo xt/*.t | sed 's|xt/05_valgrind.t||')"
-%endif
-rm lib/Test/LeakTrace/JA.pod
-mv ./JA.pod lib/Test/LeakTrace/
-
 %clean
 rm -rf %{buildroot}
 
@@ -114,11 +99,18 @@ rm -rf %{buildroot}
 %doc Changes README benchmark/ example/ %{?perl_default_filter:t/ xt/}
 %{perl_vendorarch}/auto/Test/
 %{perl_vendorarch}/Test/
-%{_mandir}/man3/Test::LeakTrace.3pm*
-%{_mandir}/man3/Test::LeakTrace::JA.3pm*
-%{_mandir}/man3/Test::LeakTrace::Script.3pm*
+%{_mandir}/man3/Test::LeakTrace.3*
+%{_mandir}/man3/Test::LeakTrace::JA.3*
+%{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Fri Nov 14 2014 Paul Howarth <paul@city-fan.org> - 0.15-1
+- Update to 0.15
+  - Fix test failure on Windows
+    (https://github.com/gfx/p5-Test-LeakTrace/pull/1)
+- Temporarily disable pod spelling test until a more up to date version of
+  Spellunker is available
+
 * Fri Sep 19 2014 Paul Howarth <paul@city-fan.org> - 0.14-13
 - ppc64le and aarch64 have valgrind
 - Drop obsoletes/provides for old -tests sub-package
