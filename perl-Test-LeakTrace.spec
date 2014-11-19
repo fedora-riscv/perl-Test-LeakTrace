@@ -6,7 +6,7 @@
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.15
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL+ or Artistic
 Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
@@ -35,8 +35,7 @@ BuildRequires:	perl(threads)
 %if !%{defined perl_bootstrap}
 BuildRequires:	perl(Test::Pod) >= 1.14
 BuildRequires:	perl(Test::Pod::Coverage) >= 1.04
-# TODO: Needs later version of Test::Spellunker than is currently available in Fedora
-#BuildRequires:	perl(Test::Spellunker)
+BuildRequires:	perl(Test::Spellunker)
 BuildRequires:	perl(Test::Synopsis)
 %if 0%{?with_valgrind}
 BuildRequires:	perl(Test::Valgrind)
@@ -104,6 +103,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Wed Nov 19 2014 Paul Howarth <paul@city-fan.org> - 0.15-2
+- Re-enable pod spelling test
+
 * Fri Nov 14 2014 Paul Howarth <paul@city-fan.org> - 0.15-1
 - Update to 0.15
   - Fix test failure on Windows
