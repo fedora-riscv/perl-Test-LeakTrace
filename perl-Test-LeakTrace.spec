@@ -6,7 +6,7 @@
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.15
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	GPL+ or Artistic
 Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
@@ -72,7 +72,7 @@ rm -rf inc/
 sed -i -e '/^inc\//d' MANIFEST
 
 # Don't try to run the valgrind test whilst bootstrapping
-%if %{defined perl_bootstrap}
+%if %{defined perl_bootstrap} || ! 0%{?with_valgrind}
 rm xt/05_valgrind.t
 sed -i -e '/^xt\/05_valgrind\.t/d' MANIFEST
 %endif
@@ -103,6 +103,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Thu Jan 15 2015 Dan Horák <dan[at]danny.cz> - 0.15-3
+- remove the valgrind test also when valgrind is missing
+
 * Wed Nov 19 2014 Paul Howarth <paul@city-fan.org> - 0.15-2
 - Re-enable pod spelling test
 
