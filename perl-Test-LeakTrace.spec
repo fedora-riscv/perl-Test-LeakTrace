@@ -14,6 +14,8 @@ Source0:	http://search.cpan.org/CPAN/authors/id/G/GF/GFUJI/Test-LeakTrace-%{vers
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(id -nu)
 # Module Build
 BuildRequires:	perl
+BuildRequires:	perl-devel
+BuildRequires:	perl-generators
 BuildRequires:	perl(ExtUtils::MakeMaker)
 BuildRequires:	perl(inc::Module::Install)
 BuildRequires:	perl(Module::Install::AuthorTests)
