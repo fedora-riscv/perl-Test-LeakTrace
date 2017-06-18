@@ -5,14 +5,16 @@
 
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
-Version:	0.15
-Release:	12%{?dist}
+Version:	0.16
+Release:	1%{?dist}
 License:	GPL+ or Artistic
-Group:		Development/Libraries
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
-Source0:	http://search.cpan.org/CPAN/authors/id/G/GF/GFUJI/Test-LeakTrace-%{version}.tar.gz
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(id -nu)
+Source0:	http://search.cpan.org/CPAN/authors/id/L/LE/LEEJO/Test-LeakTrace-%{version}.tar.gz
 # Module Build
+BuildRequires:	coreutils
+BuildRequires:	findutils
+BuildRequires:	gcc
+BuildRequires:	make
 BuildRequires:	perl
 BuildRequires:	perl-devel
 BuildRequires:	perl-generators
@@ -20,6 +22,7 @@ BuildRequires:	perl(ExtUtils::MakeMaker)
 BuildRequires:	perl(inc::Module::Install)
 BuildRequires:	perl(Module::Install::AuthorTests)
 BuildRequires:	perl(Module::Install::Repository)
+BuildRequires:	sed
 # Module Runtime
 BuildRequires:	perl(Exporter) >= 5.57
 BuildRequires:	perl(strict)
@@ -84,17 +87,13 @@ perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags}"
 make %{?_smp_mflags}
 
 %install
-rm -rf %{buildroot}
 make pure_install DESTDIR=%{buildroot}
-find %{buildroot} -type f -name .packlist -exec rm -f {} ';'
-find %{buildroot} -type f -name '*.bs' -a -size 0 -exec rm -f {} ';'
-%{_fixperms} %{buildroot}
+find %{buildroot} -type f -name .packlist -delete
+find %{buildroot} -type f -name '*.bs' -empty -delete
+%{_fixperms} -c %{buildroot}
 
 %check
 make test
-
-%clean
-rm -rf %{buildroot}
 
 %files
 %doc Changes README benchmark/ example/ %{?perl_default_filter:t/ xt/}
@@ -105,6 +104,18 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Sun Jun 18 2017 Paul Howarth <paul@city-fan.org> - 0.16-1
+- Update to 0.16
+  - Fix build and test issues with perl5.26 due to removal of . from @INC
+    (CPAN RT#120420, GH#4)
+- This release by LEEJO → update source URL
+- Simplify find commands using -empty and -delete
+- Drop EL-5 support
+  - Drop BuildRoot: and Group: tags
+  - Drop explicit buildroot cleaning in %%install section
+  - Drop explicit %%clean section
+  - BR: perl-devel unconditionally
+
 * Wed Jun 07 2017 Jitka Plesnikova <jplesnik@redhat.com> - 0.15-12
 - Perl 5.26 re-rebuild of bootstrapped packages
 

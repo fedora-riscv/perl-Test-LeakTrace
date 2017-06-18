@@ -1,0 +1,4 @@
+from Config import *
+
+addFilter("spelling-error %description -l en_US ok -> ")
+addFilter("spelling-error %description -l en_US cmp -> ")
