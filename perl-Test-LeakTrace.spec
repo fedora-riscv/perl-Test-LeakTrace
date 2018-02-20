@@ -1,12 +1,14 @@
 # some arches don't have valgrind so we need to disable its support on them
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64le s390x %{arm} aarch64
+# Note: ppc64 and ppc64le currently have broken valgrind:
+# https://bugzilla.redhat.com/show_bug.cgi?id=1470030
+%ifarch %{ix86} x86_64 ppc s390x %{arm} aarch64
 %global with_valgrind 1
 %endif
 
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.16
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	GPL+ or Artistic
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
 Source0:	http://search.cpan.org/CPAN/authors/id/L/LE/LEEJO/Test-LeakTrace-%{version}.tar.gz
@@ -104,6 +106,10 @@ make test
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Tue Feb 20 2018 Paul Howarth <paul@city-fan.org> - 0.16-5
+- Disable valgrind test on ppc64 and ppc64le until valgrind is working again
+  (#1470030)
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.16-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
@@ -116,7 +122,7 @@ make test
 * Sun Jun 18 2017 Paul Howarth <paul@city-fan.org> - 0.16-1
 - Update to 0.16
   - Fix build and test issues with perl5.26 due to removal of . from @INC
-    (CPAN RT#120420, GH#4)
+    (CPAN RT#120420, GH#3)
 - This release by LEEJO → update source URL
 - Simplify find commands using -empty and -delete
 - Drop EL-5 support
