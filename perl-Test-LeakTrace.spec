@@ -8,7 +8,7 @@
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.16
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	GPL+ or Artistic
 URL:		http://search.cpan.org/dist/Test-LeakTrace/
 Source0:	http://search.cpan.org/CPAN/authors/id/L/LE/LEEJO/Test-LeakTrace-%{version}.tar.gz
@@ -106,6 +106,9 @@ make test
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Thu Mar 15 2018 Paul Howarth <paul@city-fan.org> - 0.16-6
+- Rebuild due to missing the boat for F-28 (#1556107)
+
 * Tue Feb 20 2018 Paul Howarth <paul@city-fan.org> - 0.16-5
 - Disable valgrind test on ppc64 and ppc64le until valgrind is working again
   (#1470030)
