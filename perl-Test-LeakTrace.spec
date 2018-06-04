@@ -10,8 +10,8 @@ Summary:	Trace memory leaks
 Version:	0.16
 Release:	6%{?dist}
 License:	GPL+ or Artistic
-URL:		http://search.cpan.org/dist/Test-LeakTrace/
-Source0:	http://search.cpan.org/CPAN/authors/id/L/LE/LEEJO/Test-LeakTrace-%{version}.tar.gz
+URL:		https://metacpan.org/release/Test-LeakTrace
+Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEEJO/Test-LeakTrace-%{version}.tar.gz
 # Module Build
 BuildRequires:	coreutils
 BuildRequires:	findutils
