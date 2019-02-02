@@ -8,7 +8,7 @@
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.16
-Release:	9%{?dist}
+Release:	10%{?dist}
 License:	GPL+ or Artistic
 URL:		https://metacpan.org/release/Test-LeakTrace
 Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEEJO/Test-LeakTrace-%{version}.tar.gz
@@ -106,6 +106,9 @@ make test
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.16-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.16-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
