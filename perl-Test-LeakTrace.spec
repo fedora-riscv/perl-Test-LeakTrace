@@ -1,25 +1,25 @@
 # some arches don't have valgrind so we need to disable its support on them
 # Note: ppc64 and ppc64le currently have broken valgrind:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1470030
-%ifarch %{ix86} x86_64 ppc s390x %{arm} aarch64
+%ifarch %{ix86} x86_64 ppc s390x %{arm} aarch64 ppc64 ppc64le
 %global with_valgrind 1
 %endif
 
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.16
-Release:	10%{?dist}
+Release:	11%{?dist}
 License:	GPL+ or Artistic
 URL:		https://metacpan.org/release/Test-LeakTrace
-Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEEJO/Test-LeakTrace-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-LeakTrace-%{version}.tar.gz
 # Module Build
 BuildRequires:	coreutils
 BuildRequires:	findutils
 BuildRequires:	gcc
 BuildRequires:	make
-BuildRequires:	perl-interpreter
 BuildRequires:	perl-devel
 BuildRequires:	perl-generators
+BuildRequires:	perl-interpreter
 BuildRequires:	perl(ExtUtils::MakeMaker)
 BuildRequires:	perl(inc::Module::Install)
 BuildRequires:	perl(Module::Install::AuthorTests)
@@ -106,6 +106,9 @@ make test
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Tue Apr  2 2019 Paul Howarth <paul@city-fan.org> - 0.16-11
+- Re-enable valgrind on ppc64 and ppc64le (see #1470030)
+
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.16-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
