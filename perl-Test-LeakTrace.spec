@@ -8,7 +8,7 @@
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.16
-Release:	11%{?dist}
+Release:	12%{?dist}
 License:	GPL+ or Artistic
 URL:		https://metacpan.org/release/Test-LeakTrace
 Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-LeakTrace-%{version}.tar.gz
@@ -106,6 +106,9 @@ make test
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Fri May 31 2019 Jitka Plesnikova <jplesnik@redhat.com> - 0.16-12
+- Perl 5.30 rebuild
+
 * Tue Apr  2 2019 Paul Howarth <paul@city-fan.org> - 0.16-11
 - Re-enable valgrind on ppc64 and ppc64le (see #1470030)
 
