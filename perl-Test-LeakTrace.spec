@@ -7,8 +7,8 @@
 
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
-Version:	0.16
-Release:	18%{?dist}
+Version:	0.17
+Release:	1%{?dist}
 License:	GPL+ or Artistic
 URL:		https://metacpan.org/release/Test-LeakTrace
 Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-LeakTrace-%{version}.tar.gz
@@ -21,9 +21,6 @@ BuildRequires:	perl-devel
 BuildRequires:	perl-generators
 BuildRequires:	perl-interpreter
 BuildRequires:	perl(ExtUtils::MakeMaker)
-BuildRequires:	perl(inc::Module::Install)
-BuildRequires:	perl(Module::Install::AuthorTests)
-BuildRequires:	perl(Module::Install::Repository)
 BuildRequires:	sed
 # Module Runtime
 BuildRequires:	perl(Exporter) >= 5.57
@@ -74,10 +71,6 @@ chmod -c -x lib/Test/LeakTrace/Script.pm t/lib/foo.pl
 # Fix up shellbangs in doc scripts
 sed -i -e 's|^#!perl|#!/usr/bin/perl|' benchmark/*.pl example/*.{pl,t} {t,xt}/*.t
 
-# Avoid bundled Module::Install and use the system version instead
-rm -rf inc/
-sed -i -e '/^inc\//d' MANIFEST
-
 # Don't try to run the valgrind test whilst bootstrapping
 %if %{defined perl_bootstrap} || ! 0%{?with_valgrind}
 rm xt/05_valgrind.t
@@ -98,7 +91,7 @@ find %{buildroot} -type f -name '*.bs' -empty -delete
 make test
 
 %files
-%doc Changes README benchmark/ example/ %{?perl_default_filter:t/ xt/}
+%doc Changes README benchmark/ example/ t/ xt/
 %{perl_vendorarch}/auto/Test/
 %{perl_vendorarch}/Test/
 %{_mandir}/man3/Test::LeakTrace.3*
@@ -106,6 +99,12 @@ make test
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Tue Jan  5 2021 Paul Howarth <paul@city-fan.org> - 0.17-1
+- Update to 0.17
+  - Point issue tracker at GitHub
+- Upstream no longer uses Module::Install
+- Unconditionally include tests as documentation
+
 * Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.16-18
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
