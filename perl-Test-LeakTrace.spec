@@ -1,3 +1,4 @@
+%global perl_bootstrap 1
 # some arches don't have valgrind so we need to disable its support on them
 # Note: ppc64 and ppc64le currently have broken valgrind:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1470030
@@ -8,7 +9,7 @@
 Name:		perl-Test-LeakTrace
 Summary:	Trace memory leaks
 Version:	0.17
-Release:	9%{?dist}
+Release:	9~bootstrap%{?dist}
 License:	GPL+ or Artistic
 URL:		https://metacpan.org/release/Test-LeakTrace
 Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-LeakTrace-%{version}.tar.gz
@@ -99,6 +100,9 @@ make test
 %{_mandir}/man3/Test::LeakTrace::Script.3*
 
 %changelog
+* Tue Dec 13 2022 Liu Yang <Yang.Liu.sn@gmail.com>  - 0.17-9~bootstrap
+- bootstrap for perl 5.36 riscv64.
+
 * Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 0.17-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
